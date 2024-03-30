@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Tags.Models;
 
 namespace Tags.Context;
@@ -16,11 +17,20 @@ public class TagsContext(DbContextOptions options) : DbContext(options)
         const string CountPercentComputedSql = $"dbo.{CalcuateCountPercentFunctionName}(CAST(\"{TagCountColumnName}\" AS DECIMAL(38,18)))";
 
         modelBuilder
+            .HasDbFunction(typeof(TagsContext)
+                .GetMethod(nameof(CalculateCountPercent))!)
+            .HasName(CalcuateCountPercentFunctionName);
+
+        modelBuilder
             .Entity<TagModel>()
             .ToTable(TagTableName)
             .Property(e => e.CountPercent)
-            .HasComputedColumnSql(CountPercentComputedSql);
+            .HasComputedColumnSql(CountPercentComputedSql)
+            .ValueGeneratedNever()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         base.OnModelCreating(modelBuilder);
     }
+
+    public float CalculateCountPercent(decimal count) => throw new NotSupportedException();
 }
