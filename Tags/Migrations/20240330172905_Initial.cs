@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Tags.Context;
 
 #nullable disable
 
@@ -11,6 +12,18 @@ namespace Tags.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(
+                $"CREATE FUNCTION {TagsContext.CalcuateCountPercentFunctionName}(@count DECIMAL(38,18))" +
+                " RETURNS FLOAT" +
+                " AS" +
+                " BEGIN" +
+                " declare @sum DECIMAL(38,18)" +
+                $" select @sum = SUM(CAST(\"{TagsContext.TagCountColumnName}\" AS DECIMAL(38,18)))" +
+                $" from {TagsContext.TagTableName}" +
+                " RETURN CAST(((@count / @sum) * 100.0) AS FLOAT)" +
+                " END");
+
+
             migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
@@ -31,6 +44,8 @@ namespace Tags.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.Sql($"DROP FUNCTION {TagsContext.CalcuateCountPercentFunctionName}");
         }
     }
 }
