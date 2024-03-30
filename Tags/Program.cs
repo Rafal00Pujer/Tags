@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Tags.Context;
+using Tags.Services.Implementations;
+using Tags.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,21 @@ builder.Services.AddDbContext<TagsContext>(options =>
 
     options.UseSqlServer(connectionString);
 });
+
+builder
+    .Services
+    .AddHttpClient<IStackExchangeApiService, StackExchangeApiService>()
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler
+        {
+            AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+        };
+
+        return handler;
+    });
+
+builder.Services.AddTransient<IReloadTagsService, ReloadTagsService>();
 
 builder.Services.AddControllers();
 
