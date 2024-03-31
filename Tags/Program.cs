@@ -1,38 +1,53 @@
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using Tags.Context;
+using Tags.Extensions;
 using Tags.Services.Implementations;
 using Tags.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<TagsContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("TagsDatabase");
+builder
+    .Services
+    .AddDbContext<TagsContext>(options =>
+    {
+        var connectionString =
+            builder
+            .Configuration
+            .GetConnectionString("TagsDatabase");
 
-    options.UseSqlServer(connectionString);
-});
+        options.UseSqlServer(connectionString);
+    });
 
 builder
     .Services
     .AddHttpClient<IStackExchangeApiService, StackExchangeApiService>()
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
-        var handler = new HttpClientHandler
+        return new HttpClientHandler
         {
-            AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+            AutomaticDecompression =
+                DecompressionMethods.GZip |
+                DecompressionMethods.Deflate
         };
-
-        return handler;
     });
 
-builder.Services.AddTransient<IReloadTagsService, ReloadTagsService>();
+builder
+    .Services
+    .AddTransient<IReloadTagsService, ReloadTagsService>()
+    .AddTransient<ITagService, TagService>()
+    .AddTagSortFactory();
 
-builder.Services.AddControllers();
+builder
+    .Services
+    .AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder
+    .Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen();
 
 var app = builder.Build();
 

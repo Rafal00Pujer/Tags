@@ -1,5 +1,4 @@
-﻿using Tags.Models;
-using Tags.Models.StackEcchange;
+﻿using Tags.Models.StackExchange;
 using Tags.Services.Interfaces;
 
 namespace Tags.Services.Implementations;
