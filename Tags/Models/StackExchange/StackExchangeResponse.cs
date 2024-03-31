@@ -1,4 +1,4 @@
-﻿namespace Tags.Models.StackEcchange;
+﻿namespace Tags.Models.StackExchange;
 
 public class StackExchangeResponse<T>
 {

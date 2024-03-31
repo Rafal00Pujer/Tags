@@ -1,8 +1,8 @@
-﻿namespace Tags.Models.StackEcchange;
+﻿namespace Tags.Models.StackExchange;
 
 public class StackExchangeTag
 {
-    public int count {  get; set; }
+    public int count { get; set; }
 
     public string name { get; set; } = string.Empty;
 }
