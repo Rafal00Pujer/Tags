@@ -4,7 +4,11 @@ using Tags.Services.Interfaces;
 
 namespace Tags.Services.Implementations;
 
-public class TagSortFactory(IServiceProvider _services, IReadOnlyCollection<string> sortNames, string defaultSortName) : ITagSortFactory
+public class TagSortFactory(
+    IServiceProvider _services,
+    IReadOnlyCollection<string> sortNames,
+    string defaultSortName)
+    : ITagSortFactory
 {
     private readonly IServiceProvider _services = _services;
 

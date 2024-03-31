@@ -51,6 +51,10 @@ builder
 
 var app = builder.Build();
 
+app.MigrateDatabase();
+
+await app.ReloadTagsAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
