@@ -14,13 +14,13 @@ namespace Tags.Migrations
         {
             migrationBuilder.Sql(
                 $"CREATE FUNCTION {TagsContext.CalcuateCountPercentFunctionName}(@count DECIMAL(38,18))" +
-                " RETURNS FLOAT" +
+                " RETURNS REAL" +
                 " AS" +
                 " BEGIN" +
                 " declare @sum DECIMAL(38,18)" +
                 $" select @sum = SUM(CAST(\"{TagsContext.TagCountColumnName}\" AS DECIMAL(38,18)))" +
                 $" from {TagsContext.TagTableName}" +
-                " RETURN CAST(((@count / @sum) * 100.0) AS FLOAT)" +
+                " RETURN CAST(((@count / @sum) * 100.0) AS REAL)" +
                 " END");
 
 

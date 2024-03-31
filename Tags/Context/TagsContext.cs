@@ -27,7 +27,8 @@ public class TagsContext(DbContextOptions options) : DbContext(options)
             .Property(e => e.CountPercent)
             .HasComputedColumnSql(CountPercentComputedSql)
             .ValueGeneratedNever()
-            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
+            .Metadata
+                .SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         base.OnModelCreating(modelBuilder);
     }
