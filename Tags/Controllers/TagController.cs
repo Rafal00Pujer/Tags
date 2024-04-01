@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using Tags.Models;
 using Tags.Services.Interfaces;
 
 namespace Tags.Controllers;
@@ -16,11 +18,27 @@ public class TagController(
     private readonly ILogger<TagController> _logger = _logger;
 
     [HttpGet("Get")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<TagModel>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [SwaggerOperation(
+        Summary = "Returns tags",
+        Description = "Returns sorted tags from specified page with count equal or less than page size")]
     public async Task<IActionResult> GetTagsAsync(
-        [FromQuery] int? page,
-        [FromQuery] int? pageSize,
-        [FromQuery] string? sortType,
-        [FromQuery] bool? descendingOrder)
+        [FromQuery]
+        [SwaggerParameter("Page must be greater than 0", Required = false)]
+        int? page,
+
+        [FromQuery]
+        [SwaggerParameter("Page size must be greater than 0", Required = false)]
+        int? pageSize,
+
+        [FromQuery]
+        [SwaggerParameter("Sort type valid range: id, name, percent", Required = false)]
+        string? sortType,
+
+        [FromQuery]
+        [SwaggerParameter("Descending order valid range: true, false", Required = false)]
+        bool? descendingOrder)
     {
         try
         {

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Net;
 using Tags.Context;
 using Tags.Extensions;
@@ -59,7 +60,17 @@ builder
 builder
     .Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen();
+    .AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Version = "v1",
+            Title = "Tags API",
+            Description = "An ASP.NET Core Web API for tags from StackOverflow",
+        });
+
+        options.EnableAnnotations();
+    });
 
 var app = builder.Build();
 
