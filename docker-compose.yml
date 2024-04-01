@@ -7,6 +7,9 @@ services:
     build:
       context: .
       dockerfile: Tags/Dockerfile
+    # ports:
+    #   - "8080:8080"
+    #   - "8081:8081"
     depends_on:
      # - sql
       sql:
