@@ -4,13 +4,23 @@ using Tags.Models;
 
 namespace Tags.Context;
 
-public class TagsContext(DbContextOptions options) : DbContext(options)
+public class TagsContext : DbContext
 {
     public const string CalcuateCountPercentFunctionName = "CalculateCountPercent";
     public const string TagCountColumnName = "Count";
     public const string TagTableName = "Tags";
 
-    public DbSet<TagModel> Tags { get; set; }
+    public virtual DbSet<TagModel> Tags { get; set; }
+
+    public TagsContext() : base()
+    {
+
+    }
+
+    public TagsContext(DbContextOptions options) : base(options)
+    {
+
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
