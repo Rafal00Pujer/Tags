@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tags.Models;
 using Tags.Services.Interfaces;
 
 namespace Tags.Controllers;
@@ -8,11 +7,13 @@ namespace Tags.Controllers;
 [Route("[controller]")]
 public class TagController(
     ITagService _tagService,
-    IReloadTagsService _reloadTagsService)
+    IReloadTagsService _reloadTagsService,
+    ILogger<TagController> _logger)
     : ControllerBase
 {
     private readonly ITagService _tagService = _tagService;
     private readonly IReloadTagsService _reloadTagsService = _reloadTagsService;
+    private readonly ILogger<TagController> _logger = _logger;
 
     [HttpGet("Get")]
     public async Task<IActionResult> GetTagsAsync(
@@ -21,10 +22,19 @@ public class TagController(
         [FromQuery] string? sortType,
         [FromQuery] bool? descendingOrder)
     {
-        var result = await _tagService
-            .GetTagsAsync(page, pageSize, sortType, descendingOrder);
+        try
+        {
+            var result = await _tagService
+                .GetTagsAsync(page, pageSize, sortType, descendingOrder);
 
-        return Ok(result);
+            return Ok(result);
+        }
+        catch (ArgumentException e)
+        {
+            _logger.LogWarning(e, "Invalid request arguments.");
+
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpGet("Reload")]

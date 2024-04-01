@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Tags.Context;
 using Tags.Extensions;
+using Tags.Options;
 using Tags.Services.Implementations;
 using Tags.Services.Interfaces;
 
@@ -43,6 +44,12 @@ builder
     .AddTransient<IReloadTagsService, ReloadTagsService>()
     .AddTransient<ITagService, TagService>()
     .AddTagSortFactory();
+
+builder
+    .Services
+    .AddOptions<TagServiceOptions>()
+    .BindConfiguration(TagServiceOptions.Name)
+    .ValidateDataAnnotations();
 
 builder
     .Services
