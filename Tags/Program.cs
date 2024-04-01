@@ -15,7 +15,12 @@ builder
         var connectionString =
             builder
             .Configuration
-            .GetConnectionString("TagsDatabase");
+            .GetConnectionString("TagsDockerDatabase");
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new Exception("Invalid connection string");
+        };
 
         options.UseSqlServer(connectionString);
     });

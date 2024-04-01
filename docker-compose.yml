@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  tags:
+    image: ${DOCKER_REGISTRY-}tags
+    container_name: TagsApi
+    build:
+      context: .
+      dockerfile: Tags/Dockerfile
+    depends_on:
+     # - sql
+      sql:
+        condition: service_healthy
+
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: TagsDatabase
+    # volumes:
+    #   - db-data:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=Password1234
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Password1234" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+# volumes:
+#   sql-data:
