@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using Tags.Models;
 using Tags.Services.Interfaces;
 
@@ -56,9 +57,24 @@ public class TagController(
     }
 
     [HttpGet("Reload")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+    [SwaggerOperation(
+        Summary = "Reloads tags",
+        Description = "Deletes all tags from the database and re-downloads them.")]
     public async Task<IActionResult> ReloadAsync()
     {
-        await _reloadTagsService.ReloadAsync();
-        return NoContent();
+        try
+        {
+            await _reloadTagsService.ReloadAsync();
+
+            return NoContent();
+        }
+        catch (WebException e)
+        {
+            _logger.LogWarning(e, "Error occurred while requesting external api.");
+
+            return StatusCode(500, e.Message);
+        }
     }
 }
