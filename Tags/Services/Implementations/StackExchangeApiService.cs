@@ -23,7 +23,7 @@ public class StackExchangeApiService : IStackExchangeApiService
         var response = await _httpClient
             .GetFromJsonAsync<StackExchangeResponse<StackExchangeTag>>(requestUri);
 
-        return response;
+        return response!;
     }
 
     private static string BuildGetTagsUri(int page, int pageSize, string? sortType, bool descendingOrder)
