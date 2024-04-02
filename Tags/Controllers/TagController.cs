@@ -56,7 +56,7 @@ public class TagController(
         }
     }
 
-    [HttpGet("Reload")]
+    [HttpPost("Reload")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
     [SwaggerOperation(
