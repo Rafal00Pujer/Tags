@@ -24,7 +24,7 @@ public class TagService(
     {
         _logger
             .LogInformation(
-            "Processing request with arguments: " +
+            "Processing get tags request with arguments: " +
             "{page}, {pageSize}, {sortType}, {descendingOrder}",
             page, pageSize, sortType, descendingOrder);
 

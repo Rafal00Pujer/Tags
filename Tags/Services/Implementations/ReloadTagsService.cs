@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Net;
 using Tags.Context;
@@ -22,6 +23,8 @@ public class ReloadTagsService(
 
     public async Task ReloadAsync()
     {
+        _logger.LogInformation("Processing reload tags");
+
         await using var transaction = _context.Database.BeginTransaction();
 
         await _context.Tags.ExecuteDeleteAsync();
