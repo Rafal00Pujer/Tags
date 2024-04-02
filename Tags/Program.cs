@@ -54,6 +54,12 @@ builder
 
 builder
     .Services
+    .AddOptions<ReloadTagServiceOptions>()
+    .BindConfiguration(ReloadTagServiceOptions.Name)
+    .ValidateDataAnnotations();
+
+builder
+    .Services
     .AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
